@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+
+{% load i18n xadmin_tags %}
+
+{% load staticfiles %}
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}首页{% endblock %}</title>
+
+    <link rel="stylesheet" href="{% static 'total/css/bootstrap-datetimepicker.min.css' %}"/>
+    <link rel="stylesheet" href="{% static 'total/css/bootstrap.min.css' %}"/>
+    <link href="{% static 'total/css/dashboard.css' %}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'total/css/bootstrap-table.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'total/css/bootstrap-table-sticky-header.css' %}"/>
+
+    {% block css %}
+
+    {% endblock %}
+    <!-- js -->
+    <script src="{% static 'total/js/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'total/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'total/js/bootstrap-table.js' %}"></script>
+    <script src="{% static 'total/js/bootstrap-table-zh-CN.js' %}"></script>
+    <script src="{% static 'total/js/bootstrap-table-export.js' %}"></script>
+    <script src="{% static 'total/js/bootstrap-table-sticky-header.min.js' %}"></script>
+    <script src="{% static 'total/js/FileSaver.min.js' %}"></script>
+    <script src="{% static 'total/js/tableExport.min.js' %}"></script>
+    <script src="{% static 'total/js/xlsx.core.min.js' %}"></script>
+    <script src="{% static 'total/js/bootstrap-datetimepicker.min.js' %}"></script>
+    <script src="{% static 'total/js/bootstrap-datetimepicker.zh-CN.js' %}"></script>
+
+    {% block js %}
+
+    {% endblock %}
+</head>
+<body>
+
+{% if request.user.is_authenticated %}
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="/xadmin">股民之家后台管理系统</a>
+            </div>
+
+            <div id="navbar" class="navbar-collapse collapse">
+                {% if user.is_active and user.is_staff %}
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="#">欢迎，{{ request.user.username }}</a></li>
+                        <li><a href="/xadmin/account/password/">修改密码</a></li>
+                        <li><a href="/xadmin/logout/">注销</a></li>
+                    </ul>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <!-- 导航栏 -->
+    <div class="container-fluid">
+        <div class="row">
+            <!-- 菜单栏 -->
+            <div id="nav_menus" class="col-sm-3 col-md-2 sidebar">
+                {% block menu %}
+                    <h1>自定义图表：</h1>
+                {% endblock menu %}
+            </div>
+
+            <!-- 内容面板 -->
+            <div id="content" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                <nav class="navbar navbar-default">
+                    <div class="container-fluid">
+                        <div class="navbar-header">
+                            {% block content_title %}
+                                <h1>栏目：</h1>
+                            {% endblock %}
+                        </div>
+                    </div>
+                </nav>
+
+                <nav class="navbar navbar-default">
+                    <div class="container-fluid">
+                        <div class="navbar-header">
+                            {% block user_plug %}
+                                <h1>插件</h1>
+                            {% endblock %}
+                        </div>
+                    </div>
+                </nav>
+
+                {% block content %}
+                    <h1>正文：</h1>
+                {% endblock %}
+
+            </div>
+
+        </div>
+    </div>
+
+{% else %}
+    <script>
+        window.location.href = "/xadmin/";
+    </script>
+{% endif %}
+
+{% block footer %}
+    <div id="footer">
+        <hr/>
+        <footer class="text-center">
+            <p>&copy; {% block site_footer %}{{ site_footer }}{% endblock %}</p>
+        </footer>
+    </div>
+{% endblock %}
+
+</body>
+
+</html>

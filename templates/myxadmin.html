@@ -1,0 +1,177 @@
+{% extends "my_xadmin_base.html" %}
+
+{% load staticfiles %}
+
+{% block title %}自定义页面 | 股民之家后台管理系统{% endblock %}
+
+{% block menu %}
+
+    <div class="list-group">
+        <a href="{% url 'addxadmin' %}"
+           {% if request.path == '/xadmin/myxadmin/' or request.path == '/definedsearchpage/' %}class="list-group-item active"
+           {% else %}class="list-group-item"{% endif %}>
+            表格数据<span class="badge">1</span>
+        </a>
+
+        <a href="{% url 'addxadmin' %}" {% if request.path == '/xadmin/myxadmin/1/' %}class="list-group-item active"
+           {% else %}class="list-group-item"{% endif %}>
+            图表展示<span class="badge">3</span>
+        </a>
+
+        <a href="{% url 'addxadmin' %}" {% if request.path == '/xadmin/myxadmin/2/' %}class="list-group-item active"
+           {% else %}class="list-group-item"{% endif %}>
+            自定义功能<span class="badge">2</span>
+        </a>
+    </div>
+
+    {#    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">#}
+    {##}
+    {#        <div class="panel panel-default">#}
+    {#            <div class="panel-heading" role="tab" id="headingThree">#}
+    {#                <h4 class="panel-title">#}
+    {#                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion"#}
+    {#                       href="#collapseThree" style='text-decoration:none'>#}
+    {#                        <ul class="nav nav-pills nav-stacked">#}
+    {#                            <li {% if request.path == '/xadmin/echarts/myecharts0/' %}class="active"{% endif %}>#}
+    {#                                <font size="4">自定义功能一&nbsp;&nbsp;&nbsp;&nbsp;</font><span class="badge">1</span>#}
+    {#                            </li>#}
+    {#                        </ul>#}
+    {#                    </a>#}
+    {#                </h4>#}
+    {#            </div>#}
+    {##}
+    {#            <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">#}
+    {#                <div class="list-group">#}
+    {#                    <a href="#" {% if request.path == '/xadmin/myxadmin/' %}class="list-group-item active"#}
+    {#                       {% else %}class="list-group-item"{% endif %}>#}
+    {#                        内容一<span class="badge">1</span>#}
+    {#                    </a>#}
+    {#                    <a href="#" {% if request.path == '/xadmin/myxadmin/1/' %}class="list-group-item active"#}
+    {#                       {% else %}class="list-group-item"{% endif %}>#}
+    {#                        内容二<span class="badge">3</span>#}
+    {#                    </a>#}
+    {#                    <a href="#" {% if request.path == '/xadmin/myxadmin/2/' %}class="list-group-item active"#}
+    {#                       {% else %}class="list-group-item"{% endif %}>#}
+    {#                        内容三<span class="badge">2</span>#}
+    {#                    </a>#}
+    {#                </div>#}
+    {#            </div>#}
+    {#        </div>#}
+    {#    </div>#}
+
+{% endblock menu %}
+
+{% block content_title %}
+    <h4 class="navbar-text navbar-right"><a href="/xadmin/" class="navbar-link"><font color="#6495ed">首页</font> / </a>自定义页面
+    </h4>
+{% endblock %}
+
+
+{% block user_plug %}
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">
+                <span class="glyphicon glyphicon-fire" aria-hidden="true"></span>&nbsp;用户
+            </a>
+        </div>
+
+        <div class="navbar-header">
+            <div class="col-lg-2" style="position: absolute; top: 10px">
+                <form action="{% url 'definedsearchpage' %}" method="get">
+
+                    <input type="text" class="form-control" placeholder="输入学号" name="XadminSearchStuNum">
+
+                    <input type="text" class="form-control" placeholder="输入等级" name="XadminSearchGrade"
+                           style="position: absolute; left: 93%; top: 1%">
+
+                    <input type="submit" class="btn btn-default" value="搜索"
+                           style="position: absolute; left: 195%; top: 1%">
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block content %}
+
+    {% if request.path == '/xadmin/myxadmin/' %}
+
+        <iframe src="{% url 'definedpage' %}" width="1060" height="650" frameborder="0" align="right"></iframe>
+
+    {% else %}
+
+        <style type="text/css">
+            td, th {
+                text-align: center;
+            }
+        </style>
+
+        <div class="col-md-13" style="text-align: right; top: 2ch">
+
+        <div class="panel panel-default">
+            <h1 align="center">数据显示页</h1>
+            <table class="table table-hover table-bordered">
+                <thead class="danger">
+                <tr class="info" style="font-size: 18px">
+                    <th>ID</th>
+                    <th>学号</th>
+                    <th>等级</th>
+                    <th>查看详情</th>
+                </tr>
+                </thead>
+
+                {% for contact in contacts %}
+                    <form action="#" method="get">
+                        <tr style="font-size: 15px">
+                            <td>{{ contact.ID }}</td>
+                            <td>{{ contact.StuNum }}</td>
+                            <td>{{ contact.Grade }}</td>
+                            <td>
+                                <input type="hidden" name="searchdetail" value="{{ contact.Grade }}">
+                                <input type="submit" class="info" value="详情">
+                            </td>
+                        </tr>
+                    </form>
+                {% endfor %}
+            </table>
+        </div>
+
+    {% endif %}
+
+
+    <nav class="step-links">
+        <ul class="pagination">
+
+            {% if contacts.has_previous %}      {# 判断是否有前一页 #}
+
+                <li><a href="?page=1"><span aria-hidden="true">第一页</span></a></li>
+
+                <li><a href="?page=1" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+            {% endif %}
+
+            {% if contacts %}
+                <li><span aria-hidden="true">第 {{ contacts.number }}页 共 {{ contacts.paginator.num_pages }}页</span></li>
+            {% endif %}
+            {#   中间页面   #}
+            {% for pg in part_page %}
+                <li class=""><a href="?page={{ pg }}">{{ pg }} <span class="sr-only">(current)</span></a></li>
+            {% endfor %}
+
+            {% if contacts.has_next %}      {# 判断是否有下一页 #}
+                <li>
+                    <a href="?page={{ contacts.next_page_number }}" aria-label="Previous"><span aria-hidden="true">&raquo;</span></a>
+                </li>
+
+                <li><a href="?page={{ contacts.paginator.num_pages }}"><span aria-hidden="true">最后一页</span></a></li>
+            {% endif %}
+
+        </ul>
+    </nav>
+
+{% endblock %}
+
+
+{% block site_footer %}
+    股民之家版权所有
+{% endblock %}
