@@ -16,6 +16,7 @@
     <link href="{% static 'total/css/dashboard.css' %}" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{% static 'total/css/bootstrap-table.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'total/css/bootstrap-table-sticky-header.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'total/css/bootstrap-table-filter-control.css' %}"/>
 
     {% block css %}
 
@@ -30,12 +31,12 @@
     <script src="{% static 'total/js/FileSaver.min.js' %}"></script>
     <script src="{% static 'total/js/tableExport.min.js' %}"></script>
     <script src="{% static 'total/js/xlsx.core.min.js' %}"></script>
+    <script src="{% static 'total/js/bootstrap-datetimepicker.js' %}"></script>
     <script src="{% static 'total/js/bootstrap-datetimepicker.min.js' %}"></script>
     <script src="{% static 'total/js/bootstrap-datetimepicker.zh-CN.js' %}"></script>
+    <script src="{% static 'total/js/bootstrap-table-filter-control.js' %}"></script>
+    <script src="{% static 'total/js/ga.js' %}"></script>
 
-    {% block js %}
-
-    {% endblock %}
 </head>
 <body>
 
@@ -115,6 +116,197 @@
     </div>
 {% endblock %}
 
-</body>
 
+{% block js %}
+    <script>
+
+        $(document).ready(function () {
+            $("#StuNum").hide();
+            $("#Data").hide();
+        });
+        $("#select").on("change", function () {
+            if ($("option:selected", this).val() == 1) {
+                $("#StuNum").show();
+                $("#Data").hide();
+
+                $(document).ready(function () {
+                    $('input[name="StartTime"]').val("");
+                    $('input[name="EndTime"]').val("");
+                });
+
+            } else if ($("option:selected", this).val() == 2) {
+                $("#Data").show();
+                $("#StuNum").hide();
+
+                $(document).ready(function () {
+                    $('input[name="XadminSearchStuNum"]').val("");
+                });
+
+            } else {
+                $("#StuNum").hide();
+                $("#Data").hide();
+                $(document).ready(function () {
+                    $('input[name="StartTime"]').val("");
+                    $('input[name="EndTime"]').val("");
+                    $('input[name="XadminSearchStuNum"]').val("");
+                });
+            }
+        });
+
+        // 页面加载完毕后待执行
+        $(document).ready(function () {
+            $("#menu1").addClass("active");
+
+            $(".form_date").datetimepicker({
+                language: 'zh-CN',
+                weekStart: 1,
+                todayBtn: 1,
+                autoclose: 1,
+                todayHighlight: 1,
+                startView: 2,
+                minView: 2,
+                forceParse: 0
+            });
+
+            $('.form_date').datetimepicker('setDate', new Date());
+
+            $("#menu").click(function () {
+                $("#nav_menus").toggle(1000);
+            });
+
+
+            $("#search").click(function () {
+                let startdate = $("#startdate").val();
+                let enddate = $("#enddate").val();
+                if (startdate > enddate) {
+                    alert("开始日期不能大于截止日期哟！");
+                } else {
+                    $("#table").bootstrapTable('destroy');
+                    {#alert(enddate);#}
+                    params = {"startdate": startdate, "enddate": enddate};
+                    InitTable(params);
+                }
+
+            });
+
+        });
+
+
+        {# ajax获取表单数据 #}
+
+        function InitTable() {
+            stickyHeaderOffsetY = 0;
+
+            let StuNum = $('input[name="XadminSearchStuNum"]').val();
+            let StartTime = $('input[name="StartTime"]').val();
+            let EndTime = $('input[name="EndTime"]').val();
+            let date = new Date();
+
+
+            now_data = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+
+            if (StartTime > now_data) {
+                alert("开始日期不能大于当前日期！" + "开始日期" + StartTime + "结束日期" + EndTime + '当前日期' + now_data);
+            }
+            else if (StartTime > EndTime) {
+                alert("开始日期不能大于截止日期哟！" + "开始日期" + StartTime + "结束日期" + EndTime + '当前日期' + now_data);
+            }
+            else {
+                params = {'StuNum': StuNum, 'StartTime': StartTime, 'EndTime': EndTime};
+                console.log(params);
+
+                function getColumns() {
+                    myColumns = {};
+                    $.ajax({
+                        url: '/getJson/',
+                        data: params,
+                        type: 'get',
+                        dataType: 'json',
+                        async: false,
+                        success: function (res) {
+                            myColumns['columns'] = res.columns;
+                            myColumns['rows'] = res.rows;
+                            console.log(res.rows);
+                            {#alert(params);#}
+                            return myColumns;
+                        }
+                    });
+                    return myColumns;
+                }
+
+                myColumns = getColumns();
+
+                $("#table").bootstrapTable({
+                    columns: [
+                        {
+                            checkbox: true
+                        },
+                        {
+                            field: 'ID',
+                            title: 'ID',
+                            sortable: "true"
+                        },
+                        {
+                            field: 'StuNum',
+                            title: '学号',
+                            sortable: "true",
+                            filterControl: 'select'
+                        },
+                        {
+                            field: 'Grade',
+                            title: '等级',
+                            sortable: "true",
+                            filterControl: 'select'
+                        }
+                    ],
+                    data: myColumns['rows'],
+                    method: 'get',                      //请求方式（*）
+
+                    toolbar: '#toolbar',                //工具按钮用哪个容器-->
+                    striped: true,                      //是否显示行间隔色
+                    cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+                    pagination: true,                   //是否显示分页（*）
+                    sortable: true,                     //是否启用排序
+                    sortOrder: "asc",                   //排序方式，参数【asc，desc】
+                    sortName: "rq",                    //按照某列排序，参数为列名
+                    sidePagination: "client",           //分页方式：client客户端分页，server服务端分页（*）
+                    pageNumber: 1,                       //初始化加载第一页，默认第一页
+                    pageSize: 50,                       //每页的记录行数（*）
+                    pageList: [15, 25, 50, 100],        //可供选择的每页的行数（*）
+                    search: true,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
+                    strictSearch: true,
+                    showColumns: true,                  //是否显示所有的列
+                    showRefresh: true,                  //是否显示刷新按钮
+                    minimumCountColumns: 2,             //最少允许的列数
+                    clickToSelect: true,                //是否启用点击选中行
+                    filterControl: true,
+                    filterShowClear: true,
+                    locale: 'zh-CN',
+
+                    // 固定列
+                    fixedColumns: true,
+                    fixedNumber: 2,
+
+                    // 固定表头
+                    stickyHeader: true,
+                    stickyHeaderOffsetY: stickyHeaderOffsetY - 20 + 'px',
+
+                    // Excel导出
+                    showExport: true,                   // 显示导出按钮
+                    exportDataType: 'selected',       //support: 'basic', 'all', 'selected'.
+                    exportTypes: ['excel', 'txt', 'csv'],
+                    Icons: 'glyphicon-export',
+                    exportOptions: {
+                        ignoreColumn: [0],  //忽略某一列的索引
+                        fileName: '报表',  //文件名称设置
+                        worksheetName: 'sheet',  //表格工作区名称
+                        tableName: '报表',
+                    },
+                });
+            }
+        }
+    </script>
+{% endblock %}
+
+</body>
 </html>

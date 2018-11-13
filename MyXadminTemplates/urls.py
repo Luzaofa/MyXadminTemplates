@@ -16,16 +16,14 @@ Including another URLconf
 from extra_apps import xadmin
 from django.conf.urls import url
 
-from MyXadminPlug.views import IndexView, DefinedXadminView, DefinedPageView, DefinedSearchPageView
+from MyXadminPlug.views import DefinedXadminView, getJson
 
 urlpatterns = [
     url('^xadmin/', xadmin.site.urls),
-    url('^$', IndexView.as_view(), name='index'),
+    url(r'^getJson/', getJson, name='getJson'),     # 获取数据
 
-    url(r'^xadmin/myxadmin/$', DefinedXadminView.as_view(), name='addxadmin'),  # 后台自定义页面（总）
 
-    url('^definedpage/$', DefinedPageView.as_view(), name='definedpage'),  # 后台数据展示页（表格数据、分页）
+    url(r'^xadmin/myxadmin/$', DefinedXadminView.as_view(), name='addxadmin'),  # 后台自定义页面
 
-    url('^definedsearchpage/$', DefinedSearchPageView.as_view(), name='definedsearchpage'),  # 后台数据搜索页
 
 ]
