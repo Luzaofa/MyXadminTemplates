@@ -11,6 +11,9 @@ class UserSettingsAdmin(object):
 
 xadmin.site.register(UserSettings, UserSettingsAdmin)
 
+
+
+
 class LogAdmin(object):
 
     def link(self, instance):

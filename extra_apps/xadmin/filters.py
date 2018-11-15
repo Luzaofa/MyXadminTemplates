@@ -25,7 +25,7 @@ from .util import (get_model_from_relation,
 
 class BaseFilter(object):
     title = None
-    template = 'xadmin/filters/ma_admin_page_one.html'
+    template = 'xadmin/filters/list.html'
 
     @classmethod
     def test(cls, field, request, params, model, admin_view, field_path):
@@ -148,7 +148,7 @@ class FieldFilter(BaseFilter):
 
 
 class ListFieldFilter(FieldFilter):
-    template = 'xadmin/filters/ma_admin_page_one.html'
+    template = 'xadmin/filters/list.html'
 
     def get_context(self):
         context = super(ListFieldFilter, self).get_context()

@@ -339,7 +339,7 @@
 	 *   - options {object}
 	 *   - query {string}
 	 *   - tokens {array}
-	 *   - total {int}
+	 *   - plug_ins {int}
 	 *   - items {array}
 	 *
 	 * @param {string} query
@@ -2032,7 +2032,7 @@
 		 *
 		 *   - query {string}
 		 *   - tokens {array}
-		 *   - total {int}
+		 *   - plug_ins {int}
 		 *   - items {array}
 		 *
 		 * @param {string} query

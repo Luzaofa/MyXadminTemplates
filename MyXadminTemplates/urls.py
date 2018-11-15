@@ -1,29 +1,28 @@
 """MyXadminTemplates URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/2.1/topics/http/urls/
+    https://docs.djangoproject.com/en/1.11/topics/http/urls/
 Examples:
 Function views
     1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
+    2. Add a URL to urlpatterns:  url(r'^$', views.home, name='home')
 Class-based views
     1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
+    2. Add a URL to urlpatterns:  url(r'^$', Home.as_view(), name='home')
 Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
+    1. Import the include() function: from django.conf.urls import url, include
+    2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from extra_apps import xadmin
-from django.conf.urls import url
+from django.conf.urls import url, include
+import xadmin
 
-from MyXadminPlug.views import DefinedXadminView, getJson
+from demo.views import IndexView
 
 urlpatterns = [
-    url('^xadmin/', xadmin.site.urls),
-    url(r'^getJson/', getJson, name='getJson'),     # 获取数据
+    url('^xadmin/', xadmin.site.urls),  # xadmin替换admin
 
+    url('^$', IndexView.as_view(), name='index'),  # 首页
 
-    url(r'^xadmin/myxadmin/$', DefinedXadminView.as_view(), name='addxadmin'),  # 后台自定义页面
-
+    url(r'^xadmin/plug_ins/', include('plug_ins.urls'))  # xadmin自定义页面开发
 
 ]

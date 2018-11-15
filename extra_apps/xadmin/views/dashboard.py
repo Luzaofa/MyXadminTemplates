@@ -417,7 +417,7 @@ class QuickBtnWidget(BaseWidget):
 class ListWidget(ModelBaseWidget, PartialBaseWidget):
     widget_type = 'list'
     description = _(u'Any Objects list Widget.')
-    template = "xadmin/widgets/ma_admin_page_one.html"
+    template = "xadmin/widgets/list.html"
     model_perm = 'view'
     widget_icon = 'fa fa-align-justify'
 

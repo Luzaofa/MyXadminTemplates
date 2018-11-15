@@ -241,17 +241,17 @@ ul.nav-sitemenu li a {
   border-bottom-left-radius: 0px;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1000px) {
   .panel-group.nav-sitemenu {
     position: fixed;
     margin-left: -15px;
   }
   .panel-group.nav-sitemenu .panel .list-group.in{
-    max-height: 500px;
+    max-height: 360px;
     overflow-y: auto;
   }
 }
-@media (max-width: 767px) {
+@media (max-width: 1000px) {
   .panel-group.nav-sitemenu {
     padding: 0px;
   }

@@ -257,9 +257,6 @@ class BaseAdminView(BaseAdminObject, View):
         self.base_plugins = [p(self) for p in getattr(self,
                                                       "plugin_classes", [])]
 
-        # 设置一天后过期 增加下面一行
-        # request.session.set_expiry(60)
-
         self.args = args
         self.kwargs = kwargs
         self.init_plugin(*args, **kwargs)
@@ -380,6 +377,7 @@ class CommAdminView(BaseAdminView):
                     'menus': [model_dict],
                 }
 
+
             app_menu = nav_menu[app_key]
             if app_icon:
                 app_menu['first_icon'] = app_icon
@@ -391,10 +389,12 @@ class CommAdminView(BaseAdminView):
                 app_menu['first_url'] = model_dict['url']
 
         for menu in nav_menu.values():
-            menu['menus'].sort(key=sortkeypicker(['order', 'title']))
+            # menu['menus'].sort(key=sortkeypicker(['order', 'title']))
+            menu['menus'].sort(key=sortkeypicker(['title']))
 
         nav_menu = list(nav_menu.values())
-        nav_menu.sort(key=lambda x: x['title'])
+        # nav_menu.sort(key=lambda x: x['title'])
+        nav_menu.sort(key=lambda x: (-len(x['menus'])))
 
         site_menu.extend(nav_menu)
 

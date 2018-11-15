@@ -188,7 +188,7 @@ class BookmarkWidget(PartialBaseWidget):
     widget_icon = 'fa fa-bookmark'
     description = _(
         'Bookmark Widget, can show user\'s bookmark list data in widget.')
-    template = "xadmin/widgets/ma_admin_page_one.html"
+    template = "xadmin/widgets/list.html"
 
     bookmark = ModelChoiceField(
         label=_('Bookmark'), queryset=Bookmark.objects.all(), required=False)

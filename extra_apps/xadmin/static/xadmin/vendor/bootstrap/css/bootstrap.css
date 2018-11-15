@@ -3550,6 +3550,8 @@ input[type="button"].btn-block {
 
 .open > .dropdown-menu {
   display: block;
+  max-height: 460px;
+  overflow-y: auto;
 }
 
 .open > a {
