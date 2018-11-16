@@ -3,6 +3,7 @@ from django.views import View
 from django.http import JsonResponse
 
 from .db_config import DB_helper
+from .authority import menu_filter
 
 
 def getJson(request):
@@ -42,6 +43,22 @@ class MenuOneXadminView(View):
     """
 
     def get(self, request):
+        menu_authorities = menu_filter(request)
+        menu = {
+            'menus': [],
+        }
+        for menu_authority in menu_authorities['menus']:
+            menu['menus'].append({
+                'name': menu_authority['id'],
+                'url': menu_authority['url']
+            })
+
+        # url权限过滤
+        ids = [id['id'].replace('menu', '') for id in menu_authorities['menus']]
+        # 无权限则跳转到首页
+        if str(request.path).split('/')[-2] not in ids:
+            return HttpResponse('<br/><br/><br/><center><h1>对不起，您无权访问该页面！</h1></center>')
+
         return render(request, 'plug_ins/menu1.html', {})
 
 
@@ -51,6 +68,22 @@ class MenuTwoXadminView(View):
     """
 
     def get(self, request):
+        menu_authorities = menu_filter(request)
+        menu = {
+            'menus': [],
+        }
+        for menu_authority in menu_authorities['menus']:
+            menu['menus'].append({
+                'name': menu_authority['id'],
+                'url': menu_authority['url']
+            })
+
+        # url权限过滤
+        ids = [id['id'].replace('menu', '') for id in menu_authorities['menus']]
+        # 无权限则跳转到首页
+        if str(request.path).split('/')[-2] not in ids:
+            return HttpResponse('<br/><br/><br/><center><h1>对不起，您无权访问该页面！</h1></center>')
+
         return render(request, 'plug_ins/menu2.html', {})
 
 
@@ -60,4 +93,20 @@ class MenuTheXadminView(View):
     """
 
     def get(self, request):
+        menu_authorities = menu_filter(request)
+        menu = {
+            'menus': [],
+        }
+        for menu_authority in menu_authorities['menus']:
+            menu['menus'].append({
+                'name': menu_authority['id'],
+                'url': menu_authority['url']
+            })
+
+        # url权限过滤
+        ids = [id['id'].replace('menu', '') for id in menu_authorities['menus']]
+        # 无权限则跳转到首页
+        if str(request.path).split('/')[-2] not in ids:
+            return HttpResponse('<br/><br/><br/><center><h1>对不起，您无权访问该页面！</h1></center>')
+
         return render(request, 'plug_ins/menu3.html', {})
