@@ -10,7 +10,7 @@ def menu_filter(request):
     }
 
     for menu in menus:
-        if str(menu).split('.')[0] == 'plug':
+        if str(menu).split('.')[0] == 'plug_ins':
             menu = Permission.objects.get(codename=str(menu).split('.')[-1])
             if menu.codename.split('_')[0] == 'view':
                 can_menus['menus'].append({

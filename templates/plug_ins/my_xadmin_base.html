@@ -76,23 +76,23 @@
                         {% for menu in menus %}
 
                             {% if menu.name == 'menuone' %}
-                                <a href="{% url 'menu1' %}"
-                                   {% if request.path == '/xadmin/plug_ins/menu1/' %}class="list-group-item active"
+                                <a href="{% url 'menuone' %}"
+                                   {% if request.path == '/xadmin/plug_ins/menuone/' %}class="list-group-item active"
                                    {% else %}class="list-group-item"{% endif %}>
                                     <span class="glyphicon glyphicon-cog"></span>&nbsp;&nbsp;功能一
                                 </a>
 
                             {% elif menu.name == 'menutwo' %}
 
-                                <a href="{% url 'menu2' %}"
-                                   {% if request.path == '/xadmin/plug_ins/menu2/' %}class="list-group-item active"
+                                <a href="{% url 'menutwo' %}"
+                                   {% if request.path == '/xadmin/plug_ins/menutwo/' %}class="list-group-item active"
                                    {% else %}class="list-group-item"{% endif %}>
                                     <span class="glyphicon glyphicon-cog"></span>&nbsp;&nbsp;功能二
                                 </a>
 
                             {% elif menu.name == 'menuthe' %}
-                                <a href="{% url 'menu3' %}"
-                                   {% if request.path == '/xadmin/plug_ins/menu3/' %}class="list-group-item active"
+                                <a href="{% url 'menuthe' %}"
+                                   {% if request.path == '/xadmin/plug_ins/menuthe/' %}class="list-group-item active"
                                    {% else %}class="list-group-item"{% endif %}>
                                     <span class="glyphicon glyphicon-cog"></span>&nbsp;&nbsp;功能三
                                 </a>

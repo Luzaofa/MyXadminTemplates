@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views import View
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 
 from .db_config import DB_helper
 from .authority import menu_filter
@@ -13,21 +13,21 @@ def getJson(request):
     dbheper = DB_helper()
 
     ProductName = request.GET.get('Name', None)
-    StartTime = request.GET.get('StartTime', None)
+    Splug_insrtTime = request.GET.get('Splug_insrtTime', None)
     EndTime = request.GET.get('EndTime', None)
     NowTime = request.GET.get('NowTime', None)
     Path = request.GET.get('Path', None)
 
-    if Path == '/xadmin/ta/menu1/':
-        massages = dbheper.select_menu_1(ProductName, StartTime, EndTime, NowTime)
+    if Path == '/xadmin/plug_ins/menu1/':
+        massages = dbheper.select_menu_1(ProductName, Splug_insrtTime, EndTime, NowTime)
         keys = ['date', 'productname', 'stunum', 'grade']
 
-    elif Path == '/xadmin/ta/menu2/':
-        massages = dbheper.select_menu_2(ProductName, StartTime, EndTime, NowTime)
+    elif Path == '/xadmin/plug_ins/menu2/':
+        massages = dbheper.select_menu_2(ProductName, Splug_insrtTime, EndTime, NowTime)
         keys = ['date', 'productname', 'stunum', 'grade']
 
-    elif Path == '/xadmin/ta/menu2/':
-        massages = dbheper.select_menu_3(ProductName, StartTime, EndTime, NowTime)
+    elif Path == '/xadmin/plug_ins/menu2/':
+        massages = dbheper.select_menu_3(ProductName, Splug_insrtTime, EndTime, NowTime)
         keys = ['date', 'productname', 'stunum', 'grade']
 
     list_json = [dict(zip(keys, item)) for item in massages]
@@ -54,12 +54,12 @@ class MenuOneXadminView(View):
             })
 
         # url权限过滤
-        ids = [id['id'].replace('menu', '') for id in menu_authorities['menus']]
+        ids = [id['id'] for id in menu_authorities['menus']]
         # 无权限则跳转到首页
         if str(request.path).split('/')[-2] not in ids:
             return HttpResponse('<br/><br/><br/><center><h1>对不起，您无权访问该页面！</h1></center>')
 
-        return render(request, 'plug_ins/menu1.html', {})
+        return render(request, 'plug_ins/menu1.html', {'menus': menu['menus']})
 
 
 class MenuTwoXadminView(View):
@@ -79,12 +79,12 @@ class MenuTwoXadminView(View):
             })
 
         # url权限过滤
-        ids = [id['id'].replace('menu', '') for id in menu_authorities['menus']]
+        ids = [id['id'] for id in menu_authorities['menus']]
         # 无权限则跳转到首页
         if str(request.path).split('/')[-2] not in ids:
             return HttpResponse('<br/><br/><br/><center><h1>对不起，您无权访问该页面！</h1></center>')
 
-        return render(request, 'plug_ins/menu2.html', {})
+        return render(request, 'plug_ins/menu2.html', {'menus': menu['menus']})
 
 
 class MenuTheXadminView(View):
@@ -104,9 +104,9 @@ class MenuTheXadminView(View):
             })
 
         # url权限过滤
-        ids = [id['id'].replace('menu', '') for id in menu_authorities['menus']]
+        ids = [id['id'] for id in menu_authorities['menus']]
         # 无权限则跳转到首页
         if str(request.path).split('/')[-2] not in ids:
             return HttpResponse('<br/><br/><br/><center><h1>对不起，您无权访问该页面！</h1></center>')
 
-        return render(request, 'plug_ins/menu3.html', {})
+        return render(request, 'plug_ins/menu3.html', {'menus': menu['menus']})

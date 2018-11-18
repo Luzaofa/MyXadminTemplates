@@ -33,19 +33,19 @@ class GlobalSetting(object):
                     {
                         'title': '功能一',
                         'icon': 'fa fa-smile-o',
-                        'url': '/xadmin/plug_ins/menu1/',
+                        'url': '/xadmin/plug_ins/menuone/',
                         'perm': self.get_model_perm(MenuOne, 'view')
                     },
                     {
                         'title': '功能二',
                         'icon': 'fa fa-smile-o',
-                        'url': '/xadmin/plug_ins/menu2/',
+                        'url': '/xadmin/plug_ins/menutwo/',
                         'perm': self.get_model_perm(MenuTwo, 'view')
                     },
                     {
                         'title': '功能三',
                         'icon': 'fa fa-smile-o',
-                        'url': '/xadmin/plug_ins/menu2/',
+                        'url': '/xadmin/plug_ins/menuthe/',
                         'perm': self.get_model_perm(MenuThe, 'view')
                     },
                 )
