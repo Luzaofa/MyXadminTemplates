@@ -41,6 +41,11 @@
     <script src="{% static 'plug_ins/js/xlsx.core.min.js' %}"></script>
     <script src="{% static 'plug_ins/js/bootstrap-table-key-events.min.js' %}"></script>
 
+
+    <link rel="stylesheet" href="{% static 'total/css/jquery-ui.css' %}">
+    {#        <script type="text/javascript" src="{% static 'total/js/jquery.js' %}"></script>#}
+    <script type="text/javascript" src="{% static 'total/js/jquery-ui.js' %}"></script>
+
 </head>
 <body>
 
@@ -200,12 +205,13 @@
                                                 <div class="col-lg-2" style="position: absolute; top: 0; left: 176%"
                                                      id="ProductName">
                                                     <input type="text" class="form-control" placeholder="输入名称"
-                                                           name="ProductName">
+                                                           name="ProductName" id="autocomplete">
                                                 </div>
                                             </div>
 
                                             <input type="button" value="查询" id="search_btn" class="btn-info"
                                                    style="position: absolute; left: 300%; top: 2%; height: 30px"
+                                                   title="type &quot;a&quot;"
                                                    onclick="InitTable()"/>
                                         </div>
                                     </div>
@@ -233,6 +239,42 @@
 {% endif %}
 
 {% block js %}
+
+    <script>
+
+        {#  ajax获取输入框联想内容  #}
+
+        function get_connects() {
+            myConnects = {};
+            $.ajax({
+                url: '/xadmin/plug_ins/loadconnects/',
+                type: 'get',
+                dataType: 'json',
+                data: {
+                    'input_connect': $('input[name="ProductName"]').val()
+                },
+                async: false,
+                success: function (connects) {
+                    myConnects['data'] = connects.data;
+                    console.log(connects.data);
+                    {#alert(connects.data);#}
+                    return myConnects.data;
+                }
+            });
+            return myConnects.data;
+        }
+
+        {# 初始化联想数据 #}
+        var availableTags = get_connects();
+
+        {# 点击将联想数据写入输入框 #}
+
+        $("#autocomplete").autocomplete({
+            source: availableTags
+        });
+
+    </script>
+
     <script>
 
         {# 选择按钮操作 #}
@@ -329,7 +371,7 @@
                 function getColumns() {
                     myColumns = {};
                     $.ajax({
-                        url: '/xadmin/ta/getJson/',
+                        url: '/xadmin/plug_ins/getJson/',
                         data: params,
                         type: 'get',
                         dataType: 'json',
@@ -397,12 +439,13 @@
                         ignoreColumn: [0],  //忽略某一列的索引
                         fileName: '报表',  //文件名称设置
                         worksheetName: 'sheet',  //表格工作区名称
-                        tableName: '报表',
-                    },
+                        tableName: '报表'
+                    }
                 });
             }
         }
     </script>
+
 {% endblock %}
 
 </body>

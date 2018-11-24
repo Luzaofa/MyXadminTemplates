@@ -110,3 +110,16 @@ class MenuTheXadminView(View):
             return HttpResponse('<br/><br/><br/><center><h1>对不起，您无权访问该页面！</h1></center>')
 
         return render(request, 'plug_ins/menu3.html', {'menus': menu['menus']})
+
+
+class LoadConnects(View):
+    """
+        输入框联想数据
+    """
+
+    def get(self, request):
+        input_connect = request.GET['input_connect']
+
+        connects = {'data': ['卢造发1', '卢造发1', '卢造发2', '卢造发3', '卢造发4', '卢造发5', input_connect]}
+
+        return JsonResponse(connects, safe=False)
